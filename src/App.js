@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import WordBox from "./components/WordBox";
+
+const answer = "karin";
 
 function App() {
+  const [currentBox, setCurrentBox] = useState(0);
+  const [isDone, setIsDone] = useState(false);
+
+  const sendGuess = (word) => {
+    if ((word === answer) | (currentBox === 5)) {
+      console.log("Done");
+      return setIsDone(true);
+    }
+    setCurrentBox((prevState) => prevState + 1);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {[0, 1, 2, 3, 4, 5].map((e) => (
+        <WordBox
+          boxNum={e}
+          currentBox={currentBox}
+          sendGuess={sendGuess}
+          answer={answer}
+          isDone={isDone}
+          key={e}
+        />
+      ))}
+      <button onClick={sendGuess} disabled={isDone ? true : false}>
+        Send guess
+      </button>
     </div>
   );
 }
