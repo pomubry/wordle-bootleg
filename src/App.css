@@ -1,50 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap");
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: darkslategray;
   color: white;
 }
 
 .word-box {
-  background-color: purple;
-  width: 90%;
-  height: 30vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
-  margin: 10px auto;
-}
-
-.isCurrent {
-  border: 5px solid green;
-}
-
-.isDisabled {
-  border: 5px solid gray;
-  pointer-events: none;
 }
 
 .indiv-box {
   display: flex;
-  width: 10%;
-  height: 70%;
-  background-color: pink;
-  margin: 10px;
+  width: 90px;
+  height: 90px;
+  margin: 5px;
+  background-color: white;
   color: black;
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
+  font-size: 30px;
+  font-weight: 900;
 }
 
 .isMatch {
-  color: green;
+  background-color: #65a363;
 }
 .isMisplaced {
-  color: yellow;
+  background-color: #c6b455;
 }
 .isWrong {
-  color: red;
+  background-color: #777e7f;
+}
+
+.evaluated {
+  color: white;
 }
