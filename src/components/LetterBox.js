@@ -4,6 +4,7 @@ import { GameContext } from "../context/GameContext";
 const LetterBox = ({ letter, ans, boxNum }) => {
   const { currentBox, answer, isDone } = useContext(GameContext);
   let match = "evaluated ";
+
   letter === ans
     ? (match += "isMatch")
     : answer.indexOf(letter) >= 0
