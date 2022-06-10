@@ -6,7 +6,7 @@ const WordBox = ({ boxNum, word }) => {
   const { answer } = useContext(GameContext);
 
   return (
-    <div className={"word-box"}>
+    <div className={"grid word-box"}>
       {answer.split("").map((ans, idx) => (
         <LetterBox letter={word[idx]} ans={ans} boxNum={boxNum} key={idx} />
       ))}

@@ -1,44 +1,97 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap");
+:root {
+  --dark1: #2c2c2c;
+  --dark2: #3d3d3d;
+  --light1: #fff;
+  --light2: #dddd;
+  --accent: #6657a6;
+  --gap: 0.5rem;
+  --words-col: clamp(3rem, 15vw, 3.5rem);
+  --keys-col: minmax(8%, 3rem);
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body {
   font-family: "Poppins", sans-serif;
-  background-color: darkslategray;
-  color: white;
+  background-color: var(--dark1);
+  color: var(--light1);
 }
 
 .app {
-  height: 100vh;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
 }
 
-.guesses-container {
-  margin: 1rem 0;
+h1 {
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  place-content: center;
 }
 
 .word-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  grid-template-columns: repeat(5, var(--words-col));
+  grid-template-rows: var(--words-col);
+  gap: var(--gap);
+  margin: var(--gap) 0;
 }
 
 .indiv-box {
-  width: 3rem;
-  height: 3rem;
   font-size: 2rem;
   font-weight: 900;
-  margin: 5px;
-  background-color: white;
-  color: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-transform: uppercase;
+  text-transform: capitalize;
+  background-color: var(--light1);
+  color: var(--dark2);
+}
+
+.error {
+  color: rgb(243, 103, 103);
+  font-size: 0.8rem;
+  display: block;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.keys {
+  max-width: 60rem;
+  grid-template-rows: 2.9rem;
+  gap: 0.2rem;
+  margin: var(--gap) 0;
+  margin-inline: auto;
+}
+
+.indiv-key {
+  font-size: 1rem;
+  text-transform: capitalize;
+  background-color: var(--light1);
+  color: var(--dark2);
+}
+
+.keys-row-1 {
+  grid-template-columns: repeat(11, var(--keys-col));
+}
+
+.keys-row-2 {
+  grid-template-columns: repeat(10, var(--keys-col));
+}
+
+.keys-row-3 {
+  grid-template-columns: repeat(8, var(--keys-col));
+}
+
+span {
+  transition: background-color 0.5s ease;
 }
 
 .isMatch {
@@ -55,23 +108,4 @@
 
 .evaluated {
   color: white;
-}
-
-.keyboard .indiv-box {
-  font-size: 1.5rem;
-  width: 2rem;
-  height: 2rem;
-  padding: 1.5rem;
-}
-
-.specialChar {
-  background-color: white;
-  color: black;
-  height: 1rem;
-  padding: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-transform: uppercase;
-  font-weight: 900;
 }

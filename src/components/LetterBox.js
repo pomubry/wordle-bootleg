@@ -13,9 +13,11 @@ const LetterBox = ({ letter, ans, boxNum }) => {
 
   return (
     // only add the value of `match` after evaluating the word or if the game is done.
-    <div className={`indiv-box ${(boxNum < currentBox || isDone) && match}`}>
+    <span
+      className={`grid indiv-box ${(boxNum < currentBox || isDone) && match}`}
+    >
       {letter}
-    </div>
+    </span>
   );
 };
 

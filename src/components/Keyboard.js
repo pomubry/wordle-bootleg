@@ -5,10 +5,10 @@ const Keyboard = ({ handleKeyPress, usedLetters }) => {
   return (
     <>
       {layout.map((row, idx) => (
-        <div className="word-box" key={row}>
+        <div className={`grid keys keys-row-${idx + 1}`} key={row}>
           {row.split("").map((letter) => (
-            <div
-              className={`indiv-box ${
+            <span
+              className={`grid indiv-key ${
                 Object.keys(usedLetters).indexOf(letter) !== -1 &&
                 usedLetters[letter]["status"]
               }`}
@@ -16,15 +16,21 @@ const Keyboard = ({ handleKeyPress, usedLetters }) => {
               onClick={() => handleKeyPress({ key: letter })}
             >
               {letter}
-            </div>
+            </span>
           ))}
           {
-            <div
-              className="specialChar"
+            <span
+              className="grid indiv-key special-char"
               onClick={() => handleKeyPress({ key: specialChars[idx] })}
             >
-              {specialChars[idx]}
-            </div>
+              {idx === 0 ? (
+                <i className="fa-solid fa-delete-left"></i>
+              ) : idx === 1 ? (
+                <i className="fa-solid fa-paper-plane"></i>
+              ) : (
+                <i className="fa-solid fa-rotate"></i>
+              )}
+            </span>
           }
         </div>
       ))}

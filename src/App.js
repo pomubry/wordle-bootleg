@@ -9,12 +9,21 @@ const wordGuessInit = {};
 for (let i = 0; i < 6; i++) {
   wordGuessInit[i] = "";
 }
+let usedWords = [];
 
 function App() {
   const [wordGuess, setWordGuess] = useState(wordGuessInit);
   const [currentBox, setCurrentBox] = useState(0);
   const [isDone, setIsDone] = useState(false);
   const [usedLetters, setUsedLetters] = useState({});
+  const [duplicate, setDuplicate] = useState("");
+
+  const isWordUsed = (word) => {
+    const val = Object.values(usedWords);
+    const idx = val.indexOf(word);
+    console.log(val, currentBox > 0 ? idx : -1);
+    return currentBox > 0 ? idx : -1;
+  };
 
   const sendGuess = (word) => {
     // Game is done when `word` matches the `answer` or after 5 guesses have been made
@@ -23,9 +32,16 @@ function App() {
       return setIsDone(true);
     }
 
-    //  *** TO FIX KEYBOARD HIGHLIGHT WHEN `WORD` IS SUBMITTED EVEN WHEN `WORD` IS <5 LETTERS ***
+    if (word.length !== 5) return;
+
+    if (isWordUsed(word) > -1) {
+      setDuplicate(word);
+      return;
+    }
+
     // Move on to the next box for the next guess
-    word.length === 5 && setCurrentBox((prevState) => prevState + 1);
+    setCurrentBox((prevState) => prevState + 1);
+    usedWords.push(word);
 
     // Evaluate each letter if it is matched, misplaced, or wrong
     for (let i = 0; i < 5; i++) {
@@ -63,6 +79,7 @@ function App() {
       setCurrentBox(0);
       setIsDone(false);
       setUsedLetters({});
+      usedWords = [];
     }
 
     if (isDone) return;
@@ -86,13 +103,15 @@ function App() {
         return { ...wordGuess, [currentBox]: word + key.toLowerCase() };
       });
     }
+
+    setDuplicate("");
   };
 
   return (
     <div className="app" onKeyDown={handleKeyPress} tabIndex={-1}>
       <h1>Wordle Bootleg</h1>
 
-      <div className="guesses-container">
+      <section className="guesses-container">
         <GameContext.Provider
           value={{ currentBox, isDone, answer, setUsedLetters }}
         >
@@ -101,11 +120,15 @@ function App() {
             return <WordBox boxNum={num} word={wordGuess[num]} key={num} />;
           })}
         </GameContext.Provider>
-      </div>
+      </section>
 
-      <div className="keyboard">
+      <section className="keyboard">
+        <span className={`error ${duplicate.length === 0 && "hidden"}`}>
+          The word `{duplicate.toUpperCase()}` has already been used. Try
+          another one!
+        </span>
         <Keyboard handleKeyPress={handleKeyPress} usedLetters={usedLetters} />
-      </div>
+      </section>
     </div>
   );
 }
