@@ -12,7 +12,7 @@ const LetterBox = ({ letter, ans, boxNum }) => {
     : (match += "isWrong");
 
   return (
-    // only add the value of `match` after evaluating the word or if the game is done.
+    // only add the value of `match` after evaluating the word OR if the game is done.
     <span
       className={`grid indiv-box ${(boxNum < currentBox || isDone) && match}`}
     >
