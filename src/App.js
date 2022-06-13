@@ -24,13 +24,53 @@ function App() {
     fetchAnswer();
   }, []);
 
+  useEffect(() => {
+    error && console.error(error);
+  }, [error]);
+
   const isWordUsed = (word) => {
     const val = Object.values(usedWords);
     const idx = val.indexOf(word);
     return currentBox > 0 ? idx : -1;
   };
 
+  const setLetterStatus = (word) => {
+    const letterArr = word.split("");
+
+    letterArr.forEach((letter, i) => {
+      if (letter === answer[i]) {
+        setUsedLetters((letters) => ({
+          ...letters,
+          [letter]: { status: "isMatch" },
+        }));
+      } else if (answer.indexOf(letter) >= 0) {
+        setUsedLetters((letters) => {
+          // Keep the "isMatch" value if the letter already matched before
+          let isAlreadyMatched = letters[letter]?.["status"] === "isMatch";
+
+          return {
+            ...letters,
+            [letter]: {
+              status: isAlreadyMatched ? "isMatch" : "isMisplaced",
+            },
+          };
+        });
+      } else {
+        setUsedLetters((letters) => ({
+          ...letters,
+          [letter]: { status: "isWrong" },
+        }));
+      }
+    });
+  };
+
+  const getLetterStatus = (letter) => {
+    return usedLetters[letter]?.["status"];
+  };
+
   const sendGuess = (word) => {
+    setLetterStatus(word);
+
     // Game is done when `word` matches the `answer` or after 5 guesses have been made
     if (isWordUsed(word) > -1) {
       setDuplicate(word);
@@ -42,39 +82,9 @@ function App() {
       return setIsDone(true);
     }
 
-    if (word.length !== 5) return;
-
     // Move on to the next box for the next guess
     setCurrentBox((prevState) => prevState + 1);
     usedWords.push(word);
-
-    // Evaluate each letter if it is matched, misplaced, or wrong
-    for (let i = 0; i < 5; i++) {
-      if (word[i] === answer[i]) {
-        // `word[i]` is a letter
-        setUsedLetters((letters) => ({
-          ...letters,
-          [word[i]]: { status: "isMatch" },
-        }));
-      } else if (answer.indexOf(word[i]) >= 0) {
-        setUsedLetters((letters) => {
-          // Keep the "isMatch" value if the letter already matched before
-          let isAlreadyMatched = letters[word[i]]?.["status"] === "isMatch";
-
-          return {
-            ...letters,
-            [word[i]]: {
-              status: isAlreadyMatched ? "isMatch" : "isMisplaced",
-            },
-          };
-        });
-      } else {
-        setUsedLetters((letters) => ({
-          ...letters,
-          [word[i]]: { status: "isWrong" },
-        }));
-      }
-    }
   };
 
   const handleKeyPress = ({ key }) => {
@@ -92,7 +102,7 @@ function App() {
     const isLetter = key.length === 1 && key.match(/[a-z]/i);
     const word = wordGuess[currentBox];
 
-    if (key === "Enter") return sendGuess(word);
+    if (key === "Enter" && word.length === 5) return sendGuess(word);
 
     if (key === "Backspace") {
       setWordGuess((wordGuess) => {
@@ -120,9 +130,7 @@ function App() {
         <h2>Loading...</h2>
       ) : (
         <section className="guesses-container">
-          <GameContext.Provider
-            value={{ currentBox, isDone, answer, setUsedLetters }}
-          >
+          <GameContext.Provider value={{ currentBox, isDone, getLetterStatus }}>
             {Object.keys(wordGuess).map((e) => {
               const num = Number(e);
               return <WordBox boxNum={num} word={wordGuess[num]} key={num} />;
@@ -136,7 +144,10 @@ function App() {
           The word `{duplicate.toUpperCase()}` has already been used. Try
           another one!
         </span>
-        <Keyboard handleKeyPress={handleKeyPress} usedLetters={usedLetters} />
+        <Keyboard
+          handleKeyPress={handleKeyPress}
+          getLetterStatus={getLetterStatus}
+        />
       </section>
 
       {isDone && (
@@ -151,3 +162,6 @@ function App() {
 }
 
 export default App;
+
+// Fixed keyboard not updating color when game is done
+// added [set/get]LetterStatus() to handle colors

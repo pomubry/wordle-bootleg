@@ -1,17 +1,14 @@
 const layout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
 const specialChars = ["Backspace", "Enter", "Restart"];
 
-const Keyboard = ({ handleKeyPress, usedLetters }) => {
+const Keyboard = ({ handleKeyPress, getLetterStatus }) => {
   return (
     <>
       {layout.map((row, idx) => (
         <div className={`grid keys keys-row-${idx + 1}`} key={row}>
           {row.split("").map((letter) => (
             <span
-              className={`grid indiv-key ${
-                Object.keys(usedLetters).indexOf(letter) !== -1 &&
-                usedLetters[letter]["status"]
-              }`}
+              className={`grid indiv-key ${getLetterStatus(letter)}`}
               key={letter}
               onClick={() => handleKeyPress({ key: letter })}
             >

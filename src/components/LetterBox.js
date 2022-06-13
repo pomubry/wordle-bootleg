@@ -1,15 +1,10 @@
 import { useContext } from "react";
 import { GameContext } from "../context/GameContext";
 
-const LetterBox = ({ letter, ans, boxNum }) => {
-  const { currentBox, answer, isDone } = useContext(GameContext);
-  let match = "evaluated ";
+const LetterBox = ({ letter, boxNum }) => {
+  const { currentBox, isDone, getLetterStatus } = useContext(GameContext);
 
-  letter === ans
-    ? (match += "isMatch")
-    : answer.indexOf(letter) >= 0
-    ? (match += "isMisplaced")
-    : (match += "isWrong");
+  let match = `evaluated ${getLetterStatus(letter)}`;
 
   return (
     // only add the value of `match` after evaluating the word OR if the game is done.
