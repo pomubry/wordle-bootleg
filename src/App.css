@@ -77,6 +77,10 @@ h1 {
   margin-inline: auto;
 }
 
+.keys span:hover {
+  cursor: pointer;
+}
+
 .indiv-key {
   font-size: 1rem;
   text-transform: capitalize;
@@ -97,24 +101,36 @@ h1 {
   grid-template-columns: repeat(8, var(--keys-col));
 }
 
-span {
-  transition: background-color 0.5s ease;
-}
-
 .isMatch {
   background-color: #65a363;
+  transition: background-color 0.5s ease;
 }
 
 .isMisplaced {
   background-color: #c6b455;
+  transition: background-color 0.5s ease;
 }
 
 .isWrong {
   background-color: #777e7f;
+  transition: background-color 0.5s ease;
 }
 
 .evaluated {
   color: white;
+  animation: flipAnimation 0.5s;
+}
+
+@keyframes flipAnimation {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
 }
 
 .backdrop {
@@ -134,19 +150,30 @@ span {
   max-width: 80%;
   background-color: var(--dark1);
   color: var(--light2);
-  padding: 1rem 2rem;
+  padding: 2rem clamp(1rem, 5vw, 3rem);
   display: grid;
   place-items: center;
   gap: 1rem;
   border-radius: 0.8rem;
+  border: 2px solid var(--light1);
+  position: relative;
 }
 
 .modal p {
   text-align: center;
 }
 
+.modal a {
+  text-decoration: none;
+  color: var(--light1);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .modal-buttons button {
-  margin-left: 0.5rem;
   padding: 0.4rem 0.8rem;
   border: none;
   color: white;
@@ -161,12 +188,21 @@ span {
   transition: padding 0.5s ease;
 }
 
+svg {
+  vertical-align: middle;
+}
+
 .modal-buttons button:nth-child(1) {
   background-color: #6657a6;
 }
 
 .modal-buttons button:nth-child(2) {
   background-color: var(--dark2);
+}
+
+.github-container {
+  position: absolute;
+  bottom: 0.2rem;
 }
 
 .modal-correct {
