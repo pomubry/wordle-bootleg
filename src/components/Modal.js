@@ -6,9 +6,9 @@ import { GameContext } from "../context/GameContext";
 
 const Modal = () => {
   const [isShown, setIsShown] = useState(true);
-  const { wordGuess, currentBox, answer, handleKeyPress } =
+  const { usedWords, currentBox, answer, restartGame } =
     useContext(GameContext);
-  const isCorrect = wordGuess[currentBox] === answer;
+  const isCorrect = usedWords.current[currentBox] === answer;
 
   return (
     <div className={`backdrop ${isShown && "modal-shown"}`}>
@@ -21,7 +21,7 @@ const Modal = () => {
           <span className="modal-correct">{answer.toUpperCase()}</span>!
         </p>
         <div className="modal-buttons">
-          <button onClick={() => handleKeyPress({ key: "Restart" })}>
+          <button onClick={() => restartGame()}>
             <BsArrowRepeat /> Try Again!
           </button>
           <button onClick={() => setIsShown(false)}>

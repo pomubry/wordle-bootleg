@@ -6,8 +6,9 @@ import { BsArrowRepeat } from "react-icons/bs";
 const layout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
 const specialChars = ["Backspace", "Enter", "Restart"];
 
-const Keyboard = () => {
-  const { handleKeyPress, getKeyboardStatus } = useContext(GameContext);
+const Keyboard = ({ handleKeyPress }) => {
+  const { getKeyboardStatus } = useContext(GameContext);
+  console.log("rendering keyboard");
   return (
     <>
       {layout.map((row, idx) => (

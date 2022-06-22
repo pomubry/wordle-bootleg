@@ -1,21 +1,16 @@
+import { useRef } from "react";
 import { createContext, useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
-
-const wordGuessInit = {};
-for (let i = 0; i < 6; i++) {
-  wordGuessInit[i] = "";
-}
-let usedWords = [];
 
 export const GameContext = createContext();
 
 const GameProvider = ({ children }) => {
-  const [wordGuess, setWordGuess] = useState(wordGuessInit);
   const [currentBox, setCurrentBox] = useState(0);
   const [isDone, setIsDone] = useState(false);
   const [usedLetters, setUsedLetters] = useState({});
   const [duplicate, setDuplicate] = useState("");
   const { answer, loading, error, fetchAnswer } = useFetch();
+  const usedWords = useRef([]);
 
   useEffect(() => {
     fetchAnswer();
@@ -27,8 +22,7 @@ const GameProvider = ({ children }) => {
   }, [error]);
 
   const isWordUsed = (word) => {
-    const val = Object.values(usedWords);
-    const idx = val.indexOf(word);
+    const idx = usedWords.current.indexOf(word);
     return currentBox > 0 ? idx : -1;
   };
 
@@ -75,74 +69,44 @@ const GameProvider = ({ children }) => {
   };
 
   const sendGuess = (word) => {
-    setLetterStatus(word);
-
-    // Game is done when `word` matches the `answer` or after 5 guesses have been made
     if (isWordUsed(word) > -1) {
-      setDuplicate(word);
-      return;
+      return setDuplicate(word);
     }
+
+    setLetterStatus(word);
+    usedWords.current.push(word);
 
     if (word === answer.toLowerCase() || currentBox === 5) {
-      console.log("Done");
+      // Game is done when `word` matches the `answer` or after 5 guesses have been made
       return setIsDone(true);
+    } else {
+      // Move on to the next box for the next guess
+      setCurrentBox((prevState) => prevState + 1);
     }
-
-    // Move on to the next box for the next guess
-    setCurrentBox((prevState) => prevState + 1);
-    usedWords.push(word);
   };
 
-  const handleKeyPress = ({ key }) => {
-    if (key === "Restart") {
-      setWordGuess(wordGuessInit);
-      setCurrentBox(0);
-      setIsDone(false);
-      setUsedLetters({});
-      usedWords = [];
-      fetchAnswer();
-    }
-
-    if (isDone) return;
-
-    const isLetter = key.length === 1 && key.match(/[a-z]/i);
-    const word = wordGuess[currentBox];
-
-    if (key === "Enter" && word.length === 5) return sendGuess(word);
-
-    if (key === "Backspace") {
-      setWordGuess((wordGuess) => {
-        let word = wordGuess[currentBox];
-        return {
-          ...wordGuess,
-          [currentBox]: word.slice(0, word.length - 1),
-        };
-      });
-    }
-
-    // Only `setWord` if current word is < 5 letters & `key` is a letter
-    if (word.length < 5 && isLetter) {
-      setWordGuess((wordGuess) => {
-        let word = wordGuess[currentBox];
-        return { ...wordGuess, [currentBox]: word + key.toLowerCase() };
-      });
-    }
-
-    setDuplicate("");
+  const restartGame = () => {
+    setCurrentBox(0);
+    setIsDone(false);
+    setUsedLetters({});
+    usedWords.current = [];
+    fetchAnswer();
   };
 
   return (
     <GameContext.Provider
       value={{
-        loading,
-        handleKeyPress,
-        currentBox,
         isDone,
+        answer,
+        currentBox,
+        duplicate,
+        loading,
+        usedWords,
         getKeyboardStatus,
         getLetterStatus,
-        wordGuess,
-        duplicate,
-        answer,
+        setDuplicate,
+        sendGuess,
+        restartGame,
       }}
     >
       {children}
