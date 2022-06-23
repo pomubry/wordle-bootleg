@@ -6,7 +6,7 @@ import "./App.css";
 
 function App() {
   const { loading, isDone } = useContext(GameContext);
-  console.log("rendering app");
+
   return (
     <div className="app">
       <h1>Wordle Bootleg</h1>

@@ -13,17 +13,25 @@ const WordBox = ({ boxRow }) => {
     setDuplicate,
     restartGame,
     isDone,
-    setResetWordBoxes,
+    resetMethods,
   } = useContext(GameContext);
   const [wordLocal, setWord] = useState("");
   const divListener = useRef(null);
 
-  // Set a referance to setWord in the global state.
+  // Set a reference to setWord in the global state.
   // To be used when game is reset.
   useEffect(() => {
-    setResetWordBoxes((wordBoxes) => [...wordBoxes, setWord]);
+    resetMethods.current = [...resetMethods.current, setWord];
     // eslint-disable-next-line
   }, []);
+
+  // Focus on the divListener after succesfully submitting an answer
+  // to allow continous keyboard input
+  useEffect(() => {
+    divListener.current?.focus();
+  }, [currentBox]);
+
+  const isRowActive = boxRow === currentBox;
 
   const handleKeyPress = ({ key }) => {
     if (key === "Restart") {
@@ -31,6 +39,7 @@ const WordBox = ({ boxRow }) => {
     }
 
     if (isDone) return;
+
     const isLetter = key.length === 1 && key.match(/[a-z]/i);
 
     if (key === "Enter" && wordLocal.length === 5) {
@@ -58,15 +67,14 @@ const WordBox = ({ boxRow }) => {
     </section>
   );
 
-  const isRowActive = boxRow === currentBox;
-
-  // Focus on the divListener after succesfully submitting an answer
-  // to allow continous keyboard input
-  useEffect(() => {
-    divListener.current?.focus();
-  }, [currentBox]);
-
-  console.log("rendering wordbox", boxRow);
+  const divListenerRender = (
+    <div
+      className={`div-listener testClass${boxRow}`}
+      onKeyDown={handleKeyPress}
+      tabIndex={-1}
+      ref={divListener}
+    ></div>
+  );
 
   return (
     <>
@@ -81,16 +89,7 @@ const WordBox = ({ boxRow }) => {
         ))}
       </div>
       {isRowActive ? keyboardRender : <></>}
-      {isRowActive ? (
-        <div
-          className={`div-listener testClass${boxRow}`}
-          onKeyDown={handleKeyPress}
-          tabIndex={-1}
-          ref={divListener}
-        ></div>
-      ) : (
-        <></>
-      )}
+      {isRowActive ? divListenerRender : <></>}
     </>
   );
 };
