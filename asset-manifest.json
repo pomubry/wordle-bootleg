@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/wordle-bootleg/static/css/main.f60ca787.css",
-    "main.js": "/wordle-bootleg/static/js/main.05aee519.js",
+    "main.js": "/wordle-bootleg/static/js/main.b4d80b69.js",
     "index.html": "/wordle-bootleg/index.html",
     "main.f60ca787.css.map": "/wordle-bootleg/static/css/main.f60ca787.css.map",
-    "main.05aee519.js.map": "/wordle-bootleg/static/js/main.05aee519.js.map"
+    "main.b4d80b69.js.map": "/wordle-bootleg/static/js/main.b4d80b69.js.map"
   },
   "entrypoints": [
     "static/css/main.f60ca787.css",
-    "static/js/main.05aee519.js"
+    "static/js/main.b4d80b69.js"
   ]
 }
