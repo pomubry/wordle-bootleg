@@ -13,9 +13,17 @@ const WordBox = ({ boxRow }) => {
     setDuplicate,
     restartGame,
     isDone,
+    setResetWordBoxes,
   } = useContext(GameContext);
   const [wordLocal, setWord] = useState("");
   const divListener = useRef(null);
+
+  // Set a referance to setWord in the global state.
+  // To be used when game is reset.
+  useEffect(() => {
+    setResetWordBoxes((wordBoxes) => [...wordBoxes, setWord]);
+    // eslint-disable-next-line
+  }, []);
 
   const handleKeyPress = ({ key }) => {
     if (key === "Restart") {

@@ -8,7 +8,7 @@ const specialChars = ["Backspace", "Enter", "Restart"];
 
 const Keyboard = ({ handleKeyPress }) => {
   const { getKeyboardStatus } = useContext(GameContext);
-  console.log("rendering keyboard");
+
   return (
     <>
       {layout.map((row, idx) => (

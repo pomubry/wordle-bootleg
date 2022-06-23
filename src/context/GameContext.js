@@ -9,7 +9,8 @@ const GameProvider = ({ children }) => {
   const [isDone, setIsDone] = useState(false);
   const [usedLetters, setUsedLetters] = useState({});
   const [duplicate, setDuplicate] = useState("");
-  const { answer, loading, error, fetchAnswer } = useFetch();
+  const [resetWordBoxes, setResetWordBoxes] = useState([]);
+  const { answer, generateNewAnswer, loading, error, fetchAnswer } = useFetch();
   const usedWords = useRef([]);
 
   useEffect(() => {
@@ -90,7 +91,12 @@ const GameProvider = ({ children }) => {
     setIsDone(false);
     setUsedLetters({});
     usedWords.current = [];
-    fetchAnswer();
+    generateNewAnswer();
+    console.log(resetWordBoxes.length);
+
+    // `resetWordBoxes` contains methods for each <WordBox/> state.
+    // Use these methods to reset it to empty string.
+    resetWordBoxes.forEach((setState) => setState(""));
   };
 
   return (
@@ -107,6 +113,7 @@ const GameProvider = ({ children }) => {
         setDuplicate,
         sendGuess,
         restartGame,
+        setResetWordBoxes,
       }}
     >
       {children}
