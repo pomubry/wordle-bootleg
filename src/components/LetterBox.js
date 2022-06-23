@@ -2,7 +2,14 @@ import { useContext } from "react";
 import { GameContext } from "../context/GameContext";
 
 const LetterBox = ({ letter, boxRow, index }) => {
-  const { currentBox, isDone, getLetterStatus } = useContext(GameContext);
+  const { currentBox, isDone, answer } = useContext(GameContext);
+
+  const getLetterStatus = (letter, index) =>
+    answer[index] === letter
+      ? "isMatch"
+      : answer.indexOf(letter) > -1
+      ? "isMisplaced"
+      : "isWrong";
 
   let match = `evaluated ${getLetterStatus(letter, index)}`;
 

@@ -9,24 +9,16 @@ const GameProvider = ({ children }) => {
   const [isDone, setIsDone] = useState(false);
   const [usedLetters, setUsedLetters] = useState({});
   const [duplicate, setDuplicate] = useState("");
-  const { answer, generateNewAnswer, loading, error, fetchAnswer } = useFetch();
+  const { answer, setAnswer, answerList, loading, error } = useFetch();
   const usedWords = useRef([]);
   const resetMethods = useRef([]);
-
-  useEffect(() => {
-    fetchAnswer();
-    // eslint-disable-next-line
-  }, []);
 
   useEffect(() => {
     error && console.error(error);
   }, [error]);
 
-  const isWordUsed = (word) => {
-    const idx = usedWords.current.indexOf(word);
-    return currentBox > 0 ? idx : -1;
-  };
-
+  // set a status if a letter is a match, misplaced, or wrong
+  // the state is an object with the `letter` as key, and `status` as value
   const setLetterStatus = (word) => {
     const letterArr = word.split("");
 
@@ -57,22 +49,17 @@ const GameProvider = ({ children }) => {
     });
   };
 
-  const getKeyboardStatus = (letter) => {
-    return usedLetters[letter]?.["status"];
-  };
-
-  const getLetterStatus = (letter, index) => {
-    return answer[index] === letter
-      ? "isMatch"
-      : answer.indexOf(letter) > -1
-      ? "isMisplaced"
-      : "isWrong";
-  };
-
   const sendGuess = (word) => {
-    if (isWordUsed(word) > -1) {
+    // Check if the word has been used.
+    // Also check if `usedWords.current` is not empty as it will always return `-1`
+    const idx = usedWords.current.indexOf(word);
+    if (idx > -1 && usedWords.current.length > 0) {
       return setDuplicate(word);
     }
+
+    // Check if the word is a possible answer; return if not
+    // if (answerList.indexOf(word) === -1) return;
+    // commented code above because the list of words is too small and too limiting for the player
 
     setLetterStatus(word);
     usedWords.current.push(word);
@@ -91,8 +78,11 @@ const GameProvider = ({ children }) => {
     setIsDone(false);
     setUsedLetters({});
     usedWords.current = [];
-    generateNewAnswer();
-    console.log(resetMethods.current.length);
+
+    // generate new answer.
+    let idx = Math.floor(Math.random() * answerList.length);
+    let word = answerList[idx];
+    setAnswer(word);
 
     // `resetMethods` contains methods for each <WordBox/> state.
     // Use these methods to reset it to empty string.
@@ -106,14 +96,13 @@ const GameProvider = ({ children }) => {
         answer,
         currentBox,
         duplicate,
+        setDuplicate,
+        usedLetters,
         loading,
         usedWords,
-        getKeyboardStatus,
-        getLetterStatus,
-        setDuplicate,
+        resetMethods,
         sendGuess,
         restartGame,
-        resetMethods,
       }}
     >
       {children}

@@ -7,7 +7,7 @@ const layout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
 const specialChars = ["Backspace", "Enter", "Restart"];
 
 const Keyboard = ({ handleKeyPress }) => {
-  const { getKeyboardStatus } = useContext(GameContext);
+  const { usedLetters } = useContext(GameContext);
 
   return (
     <>
@@ -15,7 +15,7 @@ const Keyboard = ({ handleKeyPress }) => {
         <div className={`grid keys keys-row-${idx + 1}`} key={row}>
           {row.split("").map((letter) => (
             <span
-              className={`grid indiv-key ${getKeyboardStatus(letter)}`}
+              className={`grid indiv-key ${usedLetters[letter]?.["status"]}`}
               key={letter}
               onClick={() => handleKeyPress({ key: letter })}
             >

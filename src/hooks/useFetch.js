@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const useFetch = () => {
   const [answer, setAnswer] = useState(null);
@@ -30,14 +30,11 @@ const useFetch = () => {
     }
   };
 
-  const generateNewAnswer = () => {
-    let idx = Math.floor(Math.random() * answerList.length);
-    let word = answerList[idx];
-    setAnswer(word);
-    setLoading(false);
-  };
+  useEffect(() => {
+    fetchAnswer();
+  }, []);
 
-  return { answer, generateNewAnswer, loading, setLoading, error, fetchAnswer };
+  return { answer, setAnswer, answerList, loading, error };
 };
 
 export default useFetch;
