@@ -77,6 +77,7 @@ const GameProvider = ({ children }) => {
     setCurrentBox(0);
     setIsDone(false);
     setUsedLetters({});
+    setDuplicate("");
     usedWords.current = [];
 
     // generate new answer.

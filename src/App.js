@@ -5,7 +5,7 @@ import Modal from "./components/Modal";
 import "./App.css";
 
 function App() {
-  const { loading, isDone } = useContext(GameContext);
+  const { loading, isDone, duplicate } = useContext(GameContext);
 
   return (
     <div className="app">
@@ -20,7 +20,10 @@ function App() {
           })}
         </>
       )}
-
+      <span className={`error ${duplicate.length === 0 && "hidden"}`}>
+        The word `{duplicate.toUpperCase()}` has already been used. Try another
+        one!
+      </span>
       {isDone && <Modal />}
     </div>
   );

@@ -5,7 +5,7 @@
   --light1: #fff;
   --light2: #dddd;
   --accent: #6657a6;
-  --gap: 0.5rem;
+  --gap: 0.35rem;
   --words-col: clamp(3rem, 15vw, 3.5rem);
   --keys-col: minmax(8%, 3rem);
   --poppins: "Poppins", sans-serif;
@@ -27,6 +27,7 @@ body {
   min-height: 100vh;
   display: grid;
   place-items: center;
+  gap: var(--gap);
   grid-template-areas:
     "."
     "."
@@ -67,6 +68,8 @@ h1 {
   text-transform: capitalize;
   background-color: var(--light1);
   color: var(--dark2);
+  transition: background-color 1s ease;
+  border-radius: 0.25rem;
 }
 
 .error {
@@ -74,10 +77,11 @@ h1 {
   font-size: 0.8rem;
   display: block;
   text-align: center;
+  pointer-events: none;
 }
 
 .hidden {
-  display: none;
+  opacity: 0;
 }
 
 .keyboard {
@@ -92,11 +96,6 @@ h1 {
   grid-template-rows: 2.9rem;
   gap: 0.2rem;
   margin-inline: auto;
-  user-select: none;
-}
-
-.keys span:hover {
-  cursor: pointer;
 }
 
 .indiv-key {
@@ -105,6 +104,8 @@ h1 {
   background-color: var(--light1);
   color: var(--dark2);
   border-radius: 0.3rem;
+  border: none;
+  cursor: pointer;
 }
 
 .keys-row-1 {
@@ -121,17 +122,14 @@ h1 {
 
 .isMatch {
   background-color: #65a363;
-  transition: background-color 0.5s ease;
 }
 
 .isMisplaced {
   background-color: #c6b455;
-  transition: background-color 0.5s ease;
 }
 
 .isWrong {
   background-color: #777e7f;
-  transition: background-color 0.5s ease;
 }
 
 .evaluated {

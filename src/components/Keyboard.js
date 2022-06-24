@@ -10,21 +10,21 @@ const Keyboard = ({ handleKeyPress }) => {
   const { usedLetters } = useContext(GameContext);
 
   return (
-    <>
+    <section className="keyboard">
       {layout.map((row, idx) => (
         <div className={`grid keys keys-row-${idx + 1}`} key={row}>
           {row.split("").map((letter) => (
-            <span
+            <button
               className={`grid indiv-key ${usedLetters[letter]?.["status"]}`}
               key={letter}
               onClick={() => handleKeyPress({ key: letter })}
             >
               {letter}
-            </span>
+            </button>
           ))}
           {
-            <span
-              className="grid indiv-key special-char"
+            <button
+              className="grid indiv-key"
               onClick={() => handleKeyPress({ key: specialChars[idx] })}
             >
               {idx === 0 ? (
@@ -34,11 +34,11 @@ const Keyboard = ({ handleKeyPress }) => {
               ) : (
                 <BsArrowRepeat />
               )}
-            </span>
+            </button>
           }
         </div>
       ))}
-    </>
+    </section>
   );
 };
 

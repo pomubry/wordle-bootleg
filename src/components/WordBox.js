@@ -8,7 +8,6 @@ import { useEffect } from "react";
 const WordBox = ({ boxRow }) => {
   const {
     currentBox,
-    duplicate,
     sendGuess,
     setDuplicate,
     restartGame,
@@ -30,8 +29,6 @@ const WordBox = ({ boxRow }) => {
   useEffect(() => {
     divListener.current?.focus();
   }, [currentBox]);
-
-  const isRowActive = boxRow === currentBox;
 
   const handleKeyPress = ({ key }) => {
     if (key === "Restart") {
@@ -57,23 +54,16 @@ const WordBox = ({ boxRow }) => {
     setDuplicate("");
   };
 
-  const keyboardRender = (
-    <section className="keyboard">
-      <span className={`error ${duplicate.length === 0 && "hidden"}`}>
-        The word `{duplicate.toUpperCase()}` has already been used. Try another
-        one!
-      </span>
+  const inputHandlers = (
+    <>
       <Keyboard handleKeyPress={handleKeyPress} />
-    </section>
-  );
-
-  const divListenerRender = (
-    <div
-      className={`div-listener testClass${boxRow}`}
-      onKeyDown={handleKeyPress}
-      tabIndex={-1}
-      ref={divListener}
-    ></div>
+      <div
+        className={`div-listener testClass${boxRow}`}
+        onKeyDown={handleKeyPress}
+        tabIndex={-1}
+        ref={divListener}
+      />
+    </>
   );
 
   return (
@@ -88,8 +78,7 @@ const WordBox = ({ boxRow }) => {
           />
         ))}
       </div>
-      {isRowActive ? keyboardRender : <></>}
-      {isRowActive ? divListenerRender : <></>}
+      {boxRow === currentBox ? inputHandlers : false}
     </>
   );
 };
